@@ -1,4 +1,5 @@
 import { encode } from '@jridgewell/sourcemap-codec';
+import { SourceMapGenerator } from 'source-map';
 
 function getBtoa () {
 	if (typeof window !== 'undefined' && typeof window.btoa === 'function') {
@@ -21,7 +22,41 @@ export default class SourceMap {
 		this.sources = properties.sources;
 		this.sourcesContent = properties.sourcesContent;
 		this.names = properties.names;
-		this.mappings = encode(properties.mappings);
+		const origin = encode(properties.mappings);
+
+
+		const smg = new SourceMapGenerator();
+		
+		properties.mappings.forEach((lineMapping, generatedLine) => {
+			lineMapping.forEach(
+				/** @param {[number,number,number,number, number|undefined]} mapping 生成的列, _, 源行, 源列 */ 
+				(mapping) => {
+					const [ generatedColumn, , sourceLine, sourceColumn, namesIndex ] = mapping;
+					smg.addMapping({
+						original: {
+							line: sourceLine + 1,
+							column: sourceColumn
+						},
+						generated: {
+							line: generatedLine + 1,
+							column: generatedColumn
+						},
+						source: 'foo.js',
+						name: namesIndex === undefined ? undefined : this.names[namesIndex]
+					});
+				});
+		});
+
+		this.mappings = smg.toJSON().mappings;
+
+		const debugLog = {
+			before: JSON.stringify(properties.mappings),
+			origin,
+			new: this.mappings
+		};
+
+		console.log(debugLog);
+
 	}
 
 	toString() {

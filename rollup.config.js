@@ -8,22 +8,22 @@ const plugins = [
 
 export default [
 	/* esm */
-	{
-		input: 'src/index.js',
-		external: ['@jridgewell/sourcemap-codec'],
-		plugins,
-		output: {
-			file: 'dist/magic-string.es.mjs',
-			format: 'es',
-			exports: 'named',
-			sourcemap: true
-		}
-	},
+	// {
+	// 	input: 'src/index.js',
+	// 	external: ['@jridgewell/sourcemap-codec'],
+	// 	plugins,
+	// 	output: {
+	// 		file: 'dist/magic-string.es.mjs',
+	// 		format: 'es',
+	// 		exports: 'named',
+	// 		sourcemap: true
+	// 	}
+	// },
 
 	/* cjs */
 	{
 		input: 'src/index-legacy.js',
-		external: ['@jridgewell/sourcemap-codec'],
+		external: ['@jridgewell/sourcemap-codec', 'source-map'],
 		plugins,
 		output: {
 			file: 'dist/magic-string.cjs.js',
@@ -34,15 +34,15 @@ export default [
 	},
 
 	/* umd */
-	{
-		input: 'src/index-legacy.js',
-		plugins,
-		output: {
-			file: 'dist/magic-string.umd.js',
-			format: 'umd',
-			exports: 'default',
-			name: 'MagicString',
-			sourcemap: true
-		}
-	}
+	// {
+	// 	input: 'src/index-legacy.js',
+	// 	plugins,
+	// 	output: {
+	// 		file: 'dist/magic-string.umd.js',
+	// 		format: 'umd',
+	// 		exports: 'default',
+	// 		name: 'MagicString',
+	// 		sourcemap: true
+	// 	}
+	// }
 ];
